@@ -28,13 +28,111 @@ body {
 }
 
 .header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 3.5rem;
+  margin-bottom: 0rem;
+  letter-spacing: 2px;
+}
+
+.hindi-subtitle {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+  opacity: 0.95;
+  font-weight: 500;
 }
 
 .header p {
   font-size: 1.1rem;
   opacity: 0.9;
+}
+
+.section-title {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-title h2 {
+  margin: 0;
+}
+
+.section-title .hindi {
+  color: #667eea;
+  font-size: 1.5rem;
+}
+
+.section-title-inline {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-title-inline h3 {
+  margin: 0;
+}
+
+.section-title-inline .hindi {
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.hindi {
+  color: #667eea;
+  font-weight: 500;
+}
+
+.speak-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: transform 0.2s;
+}
+
+.speak-btn:hover {
+  transform: scale(1.2);
+}
+
+.speak-btn.small {
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+.settings-bar {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings-bar label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.settings-bar input[type="checkbox"] {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.settings-bar select {
+  padding: 0.5rem;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: white;
+  color: #333;
 }
 
 .main {
@@ -166,9 +264,27 @@ body {
   background: linear-gradient(135deg, #667eea25 0%, #764ba225 100%);
 }
 
+.recipe-image {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.recipe-image img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
 .recipe-card h3 {
   color: #333;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .recipe-card .subtitle {
@@ -180,6 +296,48 @@ body {
 .recipe-card .blurb {
   color: #888;
   font-size: 0.85rem;
+}
+
+.ingredients-by-category {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.ingredient-category {
+  background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.ingredient-category h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.ingredient-category .hindi {
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.ingredient-category ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.ingredient-category li {
+  margin-bottom: 0.4rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.step-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .recipe-detail {
