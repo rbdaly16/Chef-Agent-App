@@ -232,10 +232,6 @@ function App() {
             />
             Show Hindi 📚
           </label>
-          <select value={speakLang} onChange={(e) => setSpeakLang(e.target.value as 'en' | 'hi')}>
-            <option value="en">English (Indian) 🎤</option>
-            <option value="hi">Hindi 🎤</option>
-          </select>
         </div>
 
         <div className="chat-section">
