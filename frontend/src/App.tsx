@@ -11,6 +11,7 @@ function App() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
   const [speakLang, setSpeakLang] = useState<'en' | 'hi'>('en')
   const [showHindi, setShowHindi] = useState(true)
+  const [ingredientsExpanded, setIngredientsExpanded] = useState(true)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -141,11 +142,17 @@ function App() {
 
           {selectedRecipe.ingredients.length > 0 && (
             <div className="section">
-              <div className="section-title-inline">
-                <h3>Ingredients</h3>
-                {showHindi && <h3 className="hindi">सामग्री</h3>}
-              </div>
-              <div className="ingredients-by-category">
+              <button
+                className="section-toggle"
+                onClick={() => setIngredientsExpanded(!ingredientsExpanded)}
+              >
+                <span className="toggle-arrow">{ingredientsExpanded ? '▼' : '▶'}</span>
+                <div className="section-title-inline">
+                  <h3>Ingredients</h3>
+                  {showHindi && <h3 className="hindi">सामग्री</h3>}
+                </div>
+              </button>
+              {ingredientsExpanded && <div className="ingredients-by-category">
                 {groupIngredientsByCategory(selectedRecipe).map(([category, items], idx) => (
                   <div key={idx} className={`ingredient-category category-${idx % 2}`}>
                     <div className="category-header">
@@ -162,7 +169,7 @@ function App() {
                     </ul>
                   </div>
                 ))}
-              </div>
+              </div>}
             </div>
           )}
 
