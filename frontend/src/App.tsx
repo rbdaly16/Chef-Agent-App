@@ -79,6 +79,17 @@ function App() {
     return icons[category] || '📦'
   }
 
+  const getStepEmoji = (stepTitle: string): string => {
+    const lower = stepTitle.toLowerCase()
+    if (lower.includes('heat') || lower.includes('warm') || lower.includes('cook') || lower.includes('fry') || lower.includes('pan')) return '🔥'
+    if (lower.includes('add') || lower.includes('mix') || lower.includes('blend') || lower.includes('combine') || lower.includes('stir')) return '🥄'
+    if (lower.includes('season') || lower.includes('salt') || lower.includes('spice')) return '🌶️'
+    if (lower.includes('simmer') || lower.includes('boil') || lower.includes('steam')) return '💨'
+    if (lower.includes('serve') || lower.includes('plate') || lower.includes('garnish')) return '🍽️'
+    if (lower.includes('rest') || lower.includes('cool') || lower.includes('chill') || lower.includes('wait')) return '⏱️'
+    return '👨‍🍳'
+  }
+
   const groupIngredientsByCategory = (recipe: Recipe) => {
     const categories = [
       'Fresh Produce',
@@ -133,9 +144,6 @@ function App() {
               <div className="section-title-inline">
                 <h3>Ingredients</h3>
                 {showHindi && <h3 className="hindi">सामग्री</h3>}
-                <button className="speak-btn" onClick={() => speak(selectedRecipe.ingredients.map(i => i.name).join(', '))}>
-                  🔊
-                </button>
               </div>
               <div className="ingredients-by-category">
                 {groupIngredientsByCategory(selectedRecipe).map(([category, items], idx) => (
@@ -163,30 +171,28 @@ function App() {
               <div className="section-title-inline">
                 <h3>Method</h3>
                 {showHindi && <h3 className="hindi">विधि</h3>}
-                <button className="speak-btn" onClick={() => speak(selectedRecipe.phases.map(p => p.steps.map(s => s.title + '. ' + s.lines.join(' ')).join(' ')).join(' '))}>
-                  🔊
-                </button>
               </div>
               {selectedRecipe.phases.map((phase, pi) => (
                 <div key={pi} className="phase-container">
                   <h4 className="phase-label">{phase.label}</h4>
-                  <ol>
+                  <div className="steps-grid">
                     {phase.steps.map((step, si) => (
-                      <li key={si}>
-                        <div className="step-header">
-                          <strong>{step.title}</strong>
-                          <button className="speak-btn small" onClick={() => speak(step.title + '. ' + step.lines.join(' '))}>
-                            🔊
-                          </button>
+                      <div key={si} className="step-card">
+                        <div className="step-number-badge">{si + 1}</div>
+                        <div className="step-emoji">{getStepEmoji(step.title)}</div>
+                        <div className="step-content">
+                          <h5>{step.title}</h5>
+                          <div className="step-instructions">
+                            {step.lines.map((line, li) => (
+                              <div key={li}>{line}</div>
+                            ))}
+                          </div>
+                          {step.badge && <div className="badge">{step.badge}</div>}
+                          {step.tip && <div className="tip">💡 {step.tip}</div>}
                         </div>
-                        {step.lines.map((line, li) => (
-                          <div key={li}>{line}</div>
-                        ))}
-                        {step.badge && <div className="badge">{step.badge}</div>}
-                        {step.tip && <div className="tip">💡 {step.tip}</div>}
-                      </li>
+                      </div>
                     ))}
-                  </ol>
+                  </div>
                 </div>
               ))}
             </div>

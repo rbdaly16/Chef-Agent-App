@@ -641,6 +641,70 @@ body {
   color: #333;
 }
 
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.step-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.step-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.step-number-badge {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.step-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.step-card h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 0.75rem 0;
+}
+
+.step-instructions {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.step-instructions div {
+  margin-bottom: 0.5rem;
+}
+
 .recipe-full-main .finale {
   background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
   color: #333;
