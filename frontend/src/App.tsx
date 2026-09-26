@@ -23,7 +23,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    // Preload voices for better TTS performance
     window.speechSynthesis.getVoices()
   }, [])
 
@@ -45,24 +44,8 @@ function App() {
 
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = speakLang === 'en' ? 'en-IN' : 'hi-IN'
-    utterance.rate = 0.85
-    utterance.pitch = 1
-
-    // Try to use Indian voices
-    const voices = window.speechSynthesis.getVoices()
-    const indianVoices = voices.filter(v => {
-      const name = v.name.toLowerCase()
-      return name.includes('indian') || name.includes('intonation') || name.includes('google')
-    })
-
-    if (indianVoices.length > 0) {
-      utterance.voice = indianVoices[0]
-    } else if (voices.length > 0) {
-      // Fallback to first available voice
-      utterance.voice = voices.find(v => v.lang.startsWith(speakLang === 'en' ? 'en' : 'hi')) || voices[0]
-    }
-
+    utterance.lang = speakLang === 'en' ? 'en-US' : 'hi-IN'
+    utterance.rate = 0.9
     window.speechSynthesis.cancel()
     window.speechSynthesis.speak(utterance)
   }
@@ -103,12 +86,108 @@ function App() {
     return categories.filter((c) => grouped[c]).map((c) => [c, grouped[c]] as const)
   }
 
+  if (selectedRecipe) {
+    return (
+      <div className="app full-screen-recipe">
+        <header className="recipe-full-header">
+          <button className="back-btn" onClick={() => setSelectedRecipe(null)}>← Back</button>
+          <h1>{selectedRecipe.name}</h1>
+          <div style={{ width: '60px' }}></div>
+        </header>
+
+        <main className="recipe-full-main">
+          <div className="recipe-settings">
+            <label>
+              <input
+                type="checkbox"
+                checked={showHindi}
+                onChange={(e) => setShowHindi(e.target.checked)}
+              />
+              Show Hindi 📚
+            </label>
+            <select value={speakLang} onChange={(e) => setSpeakLang(e.target.value as 'en' | 'hi')}>
+              <option value="en">English (Indian) 🎤</option>
+              <option value="hi">Hindi 🎤</option>
+            </select>
+          </div>
+
+          {selectedRecipe.subtitle && <p className="subtitle">{selectedRecipe.subtitle}</p>}
+          {selectedRecipe.blurb && <p className="blurb">{selectedRecipe.blurb}</p>}
+
+          {selectedRecipe.ingredients.length > 0 && (
+            <div className="section">
+              <div className="section-title-inline">
+                <h3>Ingredients</h3>
+                {showHindi && <h3 className="hindi">सामग्री</h3>}
+                <button className="speak-btn" onClick={() => speak(selectedRecipe.ingredients.map(i => i.name).join(', '))}>
+                  🔊
+                </button>
+              </div>
+              <div className="ingredients-by-category">
+                {groupIngredientsByCategory(selectedRecipe).map(([category, items], idx) => (
+                  <div key={idx} className="ingredient-category">
+                    <h4>{category}</h4>
+                    {showHindi && <h4 className="hindi">{getHindiTranslation(category)}</h4>}
+                    <ul>
+                      {items.map((ing, i) => (
+                        <li key={i}>{ing}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedRecipe.phases.length > 0 && (
+            <div className="section">
+              <div className="section-title-inline">
+                <h3>Method</h3>
+                {showHindi && <h3 className="hindi">विधि</h3>}
+                <button className="speak-btn" onClick={() => speak(selectedRecipe.phases.map(p => p.steps.map(s => s.title + '. ' + s.lines.join(' ')).join(' ')).join(' '))}>
+                  🔊
+                </button>
+              </div>
+              {selectedRecipe.phases.map((phase, pi) => (
+                <div key={pi} className="phase-container">
+                  <h4 className="phase-label">{phase.label}</h4>
+                  <ol>
+                    {phase.steps.map((step, si) => (
+                      <li key={si}>
+                        <div className="step-header">
+                          <strong>{step.title}</strong>
+                          <button className="speak-btn small" onClick={() => speak(step.title + '. ' + step.lines.join(' '))}>
+                            🔊
+                          </button>
+                        </div>
+                        {step.lines.map((line, li) => (
+                          <div key={li}>{line}</div>
+                        ))}
+                        {step.badge && <div className="badge">{step.badge}</div>}
+                        {step.tip && <div className="tip">💡 {step.tip}</div>}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {selectedRecipe.finale && (
+            <div className="finale">
+              <p>{selectedRecipe.finale}</p>
+            </div>
+          )}
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="app">
       <header className="header">
-        <h1>🍳 Kuch Khana</h1>
-        <p className="hindi-subtitle">कुछ खाना</p>
-        <p>Extract, translate, and chat about recipes</p>
+        <h1>Kuch Khana</h1>
+        {showHindi && <div className="hindi-subtitle">खाना</div>}
       </header>
 
       <main className="main">
@@ -167,8 +246,8 @@ function App() {
               {recipes.map((recipe, index) => (
                 <div
                   key={index}
-                  className={`recipe-card ${selectedRecipe === recipe ? 'selected' : ''}`}
-                  onClick={() => setSelectedRecipe(selectedRecipe === recipe ? null : recipe)}
+                  className="recipe-card"
+                  onClick={() => setSelectedRecipe(recipe)}
                 >
                   {recipe.art && (
                     <div className="recipe-image">
@@ -189,85 +268,6 @@ function App() {
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {selectedRecipe && (
-          <div className="recipe-detail">
-            <div className="recipe-header">
-              <div>
-                <h2>{selectedRecipe.name}</h2>
-                {showHindi && <h2 className="hindi">खाना</h2>}
-              </div>
-              <button onClick={() => setSelectedRecipe(null)}>Close</button>
-            </div>
-            {selectedRecipe.subtitle && <p className="subtitle">{selectedRecipe.subtitle}</p>}
-            {selectedRecipe.blurb && <p className="blurb">{selectedRecipe.blurb}</p>}
-
-            {selectedRecipe.ingredients.length > 0 && (
-              <div className="section">
-                <div className="section-title-inline">
-                  <h3>Ingredients</h3>
-                  {showHindi && <h3 className="hindi">सामग्री</h3>}
-                  <button className="speak-btn" onClick={() => speak(selectedRecipe.ingredients.map(i => i.name).join(', '))}>
-                    🔊
-                  </button>
-                </div>
-                <div className="ingredients-by-category">
-                  {groupIngredientsByCategory(selectedRecipe).map(([category, items], idx) => (
-                    <div key={idx} className="ingredient-category">
-                      <h4>{category}</h4>
-                      {showHindi && <h4 className="hindi">{getHindiTranslation(category)}</h4>}
-                      <ul>
-                        {items.map((ing, i) => (
-                          <li key={i}>{ing}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {selectedRecipe.phases.length > 0 && (
-              <div className="section">
-                <div className="section-title-inline">
-                  <h3>Method</h3>
-                  {showHindi && <h3 className="hindi">विधि</h3>}
-                  <button className="speak-btn" onClick={() => speak(selectedRecipe.phases.map(p => p.steps.map(s => s.title + '. ' + s.lines.join(' ')).join(' ')).join(' '))}>
-                    🔊
-                  </button>
-                </div>
-                {selectedRecipe.phases.map((phase, pi) => (
-                  <div key={pi}>
-                    <h4>{phase.label}</h4>
-                    <ol>
-                      {phase.steps.map((step, si) => (
-                        <li key={si}>
-                          <div className="step-header">
-                            <strong>{step.title}</strong>
-                            <button className="speak-btn small" onClick={() => speak(step.title + '. ' + step.lines.join(' '))}>
-                              🔊
-                            </button>
-                          </div>
-                          {step.lines.map((line, li) => (
-                            <div key={li}>{line}</div>
-                          ))}
-                          {step.badge && <div className="badge">{step.badge}</div>}
-                          {step.tip && <div className="tip">💡 {step.tip}</div>}
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedRecipe.finale && (
-              <div className="finale">
-                <p>{selectedRecipe.finale}</p>
-              </div>
-            )}
           </div>
         )}
       </main>
