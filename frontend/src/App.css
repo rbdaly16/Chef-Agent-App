@@ -64,18 +64,23 @@ body {
 .section-title-inline {
   display: flex;
   gap: 0.75rem;
-  align-items: center;
-  margin-bottom: 0.75rem;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .section-title-inline h3 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .section-title-inline .hindi {
   color: #667eea;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .hindi {
@@ -301,13 +306,13 @@ body {
 
 .ingredients-by-category {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
 }
 
 .ingredient-category {
-  padding: 1rem;
-  border-radius: 6px;
+  padding: 0.75rem;
+  border-radius: 4px;
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s, box-shadow 0.2s;
@@ -320,51 +325,55 @@ body {
 
 .ingredient-category.category-0 {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-left: 3px solid #22c55e;
+  border-left: 2px solid #22c55e;
 }
 
 .ingredient-category.category-1 {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-left: 3px solid #f59e0b;
+  border-left: 2px solid #f59e0b;
 }
 
 .category-header {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.35rem;
   align-items: flex-start;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .category-icon {
-  font-size: 1.25rem;
+  font-size: 1rem;
   flex-shrink: 0;
-  margin-top: 0.05rem;
+  margin-top: -0.05rem;
+  line-height: 1;
 }
 
 .ingredient-category h4 {
-  margin: 0 0 0.2rem 0;
+  margin: 0;
   color: #333;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .ingredient-category .hindi {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   margin: 0;
   color: #667eea;
   font-weight: 500;
+  line-height: 1;
 }
 
 .ingredient-category ul {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: 1rem;
   list-style-type: disc;
 }
 
 .ingredient-category li {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
   color: #555;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
 }
 
 .step-header {
@@ -617,24 +626,24 @@ body {
 
 .recipe-full-main .section {
   background: white;
-  padding: 1.25rem;
-  border-radius: 6px;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .recipe-full-main .section h3 {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  margin: -1.25rem -1.25rem 1rem -1.25rem;
-  font-size: 1rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 3px;
+  margin: -1rem -1rem 0.75rem -1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .section-title-inline h3 {
