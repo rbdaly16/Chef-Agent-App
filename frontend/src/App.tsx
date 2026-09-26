@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { askChef, getRecipes, Recipe } from './api'
+import type { Recipe } from './api'
+import { askChef, getRecipes } from './api'
 import './App.css'
 
 function App() {
