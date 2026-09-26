@@ -22,6 +22,11 @@ function App() {
     return () => controller.abort()
   }, [])
 
+  useEffect(() => {
+    // Preload voices for better TTS performance
+    window.speechSynthesis.getVoices()
+  }, [])
+
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!question.trim()) return
@@ -41,7 +46,23 @@ function App() {
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = speakLang === 'en' ? 'en-IN' : 'hi-IN'
-    utterance.rate = 0.9
+    utterance.rate = 0.85
+    utterance.pitch = 1
+
+    // Try to use Indian voices
+    const voices = window.speechSynthesis.getVoices()
+    const indianVoices = voices.filter(v => {
+      const name = v.name.toLowerCase()
+      return name.includes('indian') || name.includes('intonation') || name.includes('google')
+    })
+
+    if (indianVoices.length > 0) {
+      utterance.voice = indianVoices[0]
+    } else if (voices.length > 0) {
+      // Fallback to first available voice
+      utterance.voice = voices.find(v => v.lang.startsWith(speakLang === 'en' ? 'en' : 'hi')) || voices[0]
+    }
+
     window.speechSynthesis.cancel()
     window.speechSynthesis.speak(utterance)
   }
@@ -152,9 +173,10 @@ function App() {
                   {recipe.art && (
                     <div className="recipe-image">
                       <img
-                        src={`/art/${recipe.art}.svg`}
+                        src={`/${recipe.art}.svg`}
                         alt={recipe.name}
                         onError={(e) => {
+                          console.warn(`Failed to load image: /${recipe.art}.svg`)
                           e.currentTarget.style.display = 'none'
                         }}
                       />
