@@ -65,6 +65,20 @@ function App() {
     return translations[text.toLowerCase()] || text
   }
 
+  const getCategoryIcon = (category: string): string => {
+    const icons: { [key: string]: string } = {
+      'Fresh Produce': '🥬',
+      'Meat & Seafood': '🍗',
+      'Dairy & Eggs': '🥛',
+      'Canned & Jarred': '🥫',
+      'Dry Goods & Grains': '🌾',
+      'Spices & Seasonings': '🌶️',
+      'Oils & Condiments': '🫒',
+      'Other': '🛒',
+    }
+    return icons[category] || '📦'
+  }
+
   const groupIngredientsByCategory = (recipe: Recipe) => {
     const categories = [
       'Fresh Produce',
@@ -125,9 +139,14 @@ function App() {
               </div>
               <div className="ingredients-by-category">
                 {groupIngredientsByCategory(selectedRecipe).map(([category, items], idx) => (
-                  <div key={idx} className="ingredient-category">
-                    <h4>{category}</h4>
-                    {showHindi && <h4 className="hindi">{getHindiTranslation(category)}</h4>}
+                  <div key={idx} className={`ingredient-category category-${idx % 2}`}>
+                    <div className="category-header">
+                      <span className="category-icon">{getCategoryIcon(category)}</span>
+                      <div>
+                        <h4>{category}</h4>
+                        {showHindi && <h4 className="hindi">{getHindiTranslation(category)}</h4>}
+                      </div>
+                    </div>
                     <ul>
                       {items.map((ing, i) => (
                         <li key={i}>{ing}</li>
