@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
 import type { Recipe } from './api'
-import { askChef, getRecipes } from './api'
+import { getRecipes } from './api'
 import './App.css'
 
 function App() {
   const [recipes, setRecipes] = useState<Recipe[]>([])
-  const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('')
-  const [loading, setLoading] = useState(false)
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
   const [speakLang, setSpeakLang] = useState<'en' | 'hi'>('en')
   const [showHindi, setShowHindi] = useState(true)
@@ -26,22 +23,6 @@ function App() {
   useEffect(() => {
     window.speechSynthesis.getVoices()
   }, [])
-
-  const handleAsk = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!question.trim()) return
-    setLoading(true)
-    setAnswer('')
-    try {
-      const res = await askChef(question)
-      setAnswer(res.answer)
-    } catch (err) {
-      setAnswer('Error: Could not get answer from chef.')
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text)
@@ -232,36 +213,6 @@ function App() {
             />
             Show Hindi 📚
           </label>
-        </div>
-
-        <div className="chat-section">
-          <div className="section-title">
-            <h2>Ask the Chef</h2>
-            {showHindi && <h2 className="hindi">शेफ से पूछें</h2>}
-          </div>
-          <form onSubmit={handleAsk}>
-            <input
-              type="text"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder="Ask about recipes..."
-              disabled={loading || recipes.length === 0}
-            />
-            <button type="submit" disabled={loading || !question.trim() || recipes.length === 0}>
-              {loading ? 'Thinking...' : 'Ask'}
-            </button>
-          </form>
-          {answer && (
-            <div className="answer">
-              <h3>Answer</h3>
-              <p>{answer}</p>
-            </div>
-          )}
-          {recipes.length === 0 && (
-            <div className="empty-state">
-              <p>No recipes loaded. Upload a recipes document or link a Google Doc to get started.</p>
-            </div>
-          )}
         </div>
 
         {recipes.length > 0 && (
